@@ -1,5 +1,5 @@
 /*
- * Copyright 2015 Len Payne <len.payne@lambtoncollege.ca>.
+ * Copyright 2015 Sunil Godithi <gsunil74@gmail.com>.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -22,13 +22,60 @@ import java.util.Queue;
 
 /**
  *
- * @author Len Payne <len.payne@lambtoncollege.ca>
+ * @author Sunil Godithi <gsunil74@gmail.com>
  */
 public class OrderQueue {
+
     Queue<Order> orderQueue = new ArrayDeque<>();
-    
+    Queue<Order> processing = new ArrayDeque<>();
+
     public void add(Order order) {
+        if (order.getCustomerId().isEmpty() && order.getCustomerName().isEmpty()) {
+            throw new NoCustomerException();
+        }
+        if (order.getListOfPurchases().isEmpty()) {
+            throw new NoPurchasesException();
+        }
         orderQueue.add(order);
         order.setTimeReceived(new Date());
     }
+
+    public Order next() {
+        return orderQueue.peek();
+    }
+
+    public void process(Order order) {
+
+        if (order.getTimeReceived() != null) {
+            
+                order.setTimeProcessed(new Date());
+            }
+         else {
+            throw new RuntimeException();
+        }
+
+    }
+
+    public void fulfill(Order order) {
+        if (order.getTimeProcessed() == null) {
+            throw new RuntimeException();
+        }if (order.getTimeReceived() == null) {
+            throw new RuntimeException();
+        } 
+    }
+
+    public String report() {
+
+        if (orderQueue.isEmpty()) {
+            return "";
+        } 
+            return "";
+    }
+
+    private class NoCustomerException extends RuntimeException {
+    }
+
+    private class NoPurchasesException extends RuntimeException {
+    }
+
 }
